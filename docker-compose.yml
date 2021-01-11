@@ -1,0 +1,18 @@
+version: "3.2"
+
+services:
+  dev:
+    container_name: node-poe
+    image: paritytech/ci-linux:production
+    working_dir: /var/www/node-poe
+    ports:
+      - "9944:9944"
+    environment:
+      - CARGO_HOME=/var/www/node-poe/.cargo
+      - WASM_BUILD_TOOLCHAIN=nightly-2020-10-05
+    volumes:
+      - .:/var/www/node-poe
+      - type: bind
+        source: ./.local
+        target: /root/.local
+    command: bash -c "cargo build --release && ./target/release/node-poe --dev --ws-external"
